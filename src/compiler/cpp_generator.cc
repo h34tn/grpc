@@ -1821,6 +1821,24 @@ std::string GetSourcePrologue(grpc_generator::File* file,
                    "// If you make any local change, they will be lost.\n");
     printer->Print(vars, "// source: $filename$\n\n");
 
+    printer->Print(vars,
+        "#pragma warning(push)\n\n"
+        "// forcing value to bool true or false\n"
+        "#pragma warning (disable : 4800)\n"
+        "// decimal digit terminates octal escape sequence\n"
+        "#pragma warning (disable : 4125)\n"
+        "// behavior change __is_pod has different value in previous version\n"
+        "#pragma warning (disable : 4647)\n"
+        "// 'symbol' is not defined as a preprocessor macro,\n"
+        "// replacing with '0' for 'directives'\n"
+        "#pragma warning (disable : 4668)\n"
+        "// constructor is not implicitly called\n"
+        "#pragma warning (disable : 4582)\n"
+        "// destructor is not implicitly called\n"
+        "#pragma warning (disable : 4583)\n"
+        "// reinterpret_cast\n"
+        "#pragma warning (disable : 4946)\n\n");
+
     printer->Print(vars, "#include \"$filename_base$$message_header_ext$\"\n");
     printer->Print(vars, "#include \"$filename_base$$service_header_ext$\"\n");
     printer->Print(vars, "\n");
@@ -2324,6 +2342,7 @@ std::string GetSourceEpilogue(grpc_generator::File* file,
       temp.append("\n");
     }
     temp.append("\n");
+    temp.append("#pragma warning( pop )");
   }
 
   return temp;
